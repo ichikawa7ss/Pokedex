@@ -2,6 +2,7 @@ name: Pokedex
 options:
   deploymentTarget:
     iOS: 11.0
+    watchOS: 6.2
   carthageExecutablePath: mint run Carthage/Carthage carthage
 fileGroups:
 targets:
@@ -20,6 +21,9 @@ targets:
     - target: QuizTodayExtension
       codeSign: false
       embed: true
+    - target: WatchOSApp
+      codeSign: false
+      embed: true      
     postbuildScripts:
           - script: |
               if which mint >/dev/null; then
@@ -70,6 +74,24 @@ targets:
       - target: Domain
       - carthage: Nuke
       - sdk: NotificationCenter.framework
+  WatchOSApp:
+    type: application.watchapp2
+    platform: watchOS
+    sources: [WatchOSApp]
+    settings:
+      PRODUCT_NAME: Pokedex
+      PRODUCT_BUNDLE_IDENTIFIER: pokedex.watchkitapp
+      CODE_SIGN_STYLE: Automatic
+    dependencies:
+      - target: WatchOSAppExtension
+  WatchOSAppExtension:
+    type: watchkit2-extension
+    platform: watchOS
+    sources: [WatchOSApp Extension]
+    settings:
+      PRODUCT_NAME: WatchOSApp Extension
+      PRODUCT_BUNDLE_IDENTIFIER: pokedex.watchkitapp.watchkitextension
+      CODE_SIGN_STYLE: Automatic  
   PokedexTests:
     type: bundle.unit-test
     platform: iOS
